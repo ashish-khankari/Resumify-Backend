@@ -6,8 +6,6 @@ import { JWT_SECRET } from '../config/envConfig';
 
 export const authorization = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.access_token;
-    console.log("token", token);
-
     if (!token) {
         return apiStatusRes(res, { status: errorStatus.accessDenied, message: "Access Denied" });
     };

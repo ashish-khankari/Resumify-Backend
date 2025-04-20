@@ -50,8 +50,7 @@ const loginUser = async (req: Request, res: Response) => {
     const token = await jwt.sign({ email }, JWT_SECRET);
     res.cookie("access_token", token);
 
-
-    if (validateEmail || validatePassword) {
+    if (validateEmail && validatePassword) {
       return apiStatusRes(res, {
         status: success,
         message: "User Logged In",
@@ -59,8 +58,6 @@ const loginUser = async (req: Request, res: Response) => {
         token
       });
     } else {
-      console.log("res", res);
-
       return apiStatusRes(res, {
         status: invalid_Request,
         message: "In-valid credentials",
@@ -72,7 +69,6 @@ const loginUser = async (req: Request, res: Response) => {
 };
 
 const logoutUser = async (req: Request, res: Response) => {
-  console.log("res", res)
   try {
     res.clearCookie("access_token");
     return apiStatusRes(res, {
