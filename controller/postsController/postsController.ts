@@ -3,7 +3,6 @@ import postModel from "../../models/posts";
 import { apiStatusRes } from "../../utils/errorFunction";
 import errorStatus from "../../config/data";
 import userModel from "../../models/user";
-import { createPostType } from "../../types/globalTypes";
 
 const createPost = async (req: Request, res: Response) => {
   const { title, description, userID } = req.body;
@@ -65,7 +64,7 @@ const deletePost = async (req: Request, res: Response) => {
     if (postID) {
       await postModel.findByIdAndDelete(postID);
       return apiStatusRes(res, {
-        status: errorStatus.success,  
+        status: errorStatus.success,
         message: "Post Deleted Successfully",
       });
     } else {
@@ -82,20 +81,49 @@ const deletePost = async (req: Request, res: Response) => {
   }
 };
 
-const updatePost = async (req: Request, res:Response) => {
-  const {title, description, postID} = req.query;
+const updatePost = async (req: Request, res: Response) => {
+  const { title, description, postID } = req.body;
   try {
-    const updatePost = await postModel.findByIdAndUpdate(postID);
-    console.log("updatePost", updatePost);
-  } catch (error) {
-    console.log("error", error);
-    
+    // const post = await postModel.findOneAndUpdate(postID);
+    if (!postID) {
+      return apiStatusRes(res, {
+        status: errorStatus.notFound,
+        message: "Post not found",
+      });
+    }
+    const updatedPost = await postModel
+      .findByIdAndUpdate(
+        postID,
+        {
+          "post.title": title,
+          "post.description": description,
+        },
+        { new: true }
+      )
+      .populate("created_by");
+    if (updatedPost) {
+      return apiStatusRes(res, {
+        status: errorStatus.success,
+        message: "Post updaed Successfully",
+        res: updatedPost,
+      });
+    } else {
+      return apiStatusRes(res, {
+        status: errorStatus.invalidRequest,
+        message: "Something went wrong",
+      });
+    }
+  } catch (error: any) {
+    return apiStatusRes(res, {
+      status: errorStatus.serverError,
+      message: error.message,
+    });
   }
-}
+};
 
 export default {
   createPost,
   getAllPosts,
   deletePost,
-  updatePost
+  updatePost,
 };
