@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 import postsRouter from "./routes/postRoutes";
 import multer from "multer";
 import fileRouter from "./routes/uploadFiles";
+import mongoose from "mongoose";
+import { MONGO_URI } from "./config/envConfig";
 
 const upload = multer({ dest: "uploads/" });
 const app = express();
@@ -17,10 +19,23 @@ app.use("/api/auth", router);
 app.use("/api/post", postsRouter);
 app.use("/api/file", fileRouter);
 
-app.listen(PORT, () => {
-  try {
-    console.log("Server is running");
-  } catch (error) {
-    console.log("Error Starting Server");
-  }
-});
+mongoose.connect(MONGO_URI)
+  .then(() => {
+    console.log("✅ Connected to MongoDB Atlas");
+
+    // Start server only after DB connection
+    app.listen(Number(PORT) || 3000, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("❌ MongoDB connection failed:", error);
+  });
+
+// app.listen(PORT, () => {
+//   try {
+//     console.log("Server is running");
+//   } catch (error) {
+//     console.log("Error Starting Server");
+//   }
+// });
