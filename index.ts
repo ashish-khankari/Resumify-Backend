@@ -5,11 +5,11 @@ import postsRouter from "./routes/postRoutes";
 import multer from "multer";
 import fileRouter from "./routes/uploadFiles";
 import mongoose from "mongoose";
-import { MONGO_URI } from "./config/envConfig";
+import { MONGO_URI, PORT } from "./config/envConfig";
 
 const upload = multer({ dest: "uploads/" });
 const app = express();
-const PORT: number = 3000;
+// const PORT: number = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -24,7 +24,7 @@ mongoose.connect(MONGO_URI)
     console.log("✅ Connected to MongoDB Atlas");
 
     // Start server only after DB connection
-    app.listen(Number(PORT) || 3000, () => {
+    app.listen(Number(PORT), () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   })
