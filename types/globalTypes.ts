@@ -12,3 +12,9 @@ export interface errorFunction {
     res?: {} | [] | null,
     token?: string
  }
+
+ export interface createPostType {
+    created_by: Object,
+    title: string,
+    description: string,
+ }
