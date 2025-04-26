@@ -34,8 +34,8 @@ const registerUser = async (req: Request, res: Response) => {
         message: "User Registerd Successfully",
       });
     }
-  } catch (error) {
-    return apiStatusRes(res, { status: server_Error, message: "Server Error" });
+  } catch (error: any) {
+    return apiStatusRes(res, { status: server_Error, message: error.message });
   }
 };
 
@@ -75,7 +75,7 @@ const logoutUser = async (req: Request, res: Response) => {
       status: errorStatus.success,
       message: "Successfully logged out"
     });
-      } catch (error: any) {
+  } catch (error: any) {
     console.log(error.message)
   }
 }
