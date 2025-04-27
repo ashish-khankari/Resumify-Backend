@@ -18,6 +18,19 @@ const postsSchema = new mongoose.Schema(
         type: String,
         require: true,
       },
+      isLiked: {
+        type: Boolean,
+        require: true,
+      },
+      likesCount: {
+        type: Number,
+      },
+      comments: {
+        type: String,
+      },
+      commentsCount: {
+        type: Number,
+      }
     },
   },
   {

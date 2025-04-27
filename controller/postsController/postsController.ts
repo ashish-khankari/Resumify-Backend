@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import postModel from "../../models/posts";
 import { apiStatusRes } from "../../utils/errorFunction";
 import errorStatus from "../../config/data";
-import userModel from "../../models/user";
+import { userModel, postModel } from "../../models";
 
 const createPost = async (req: Request, res: Response) => {
   const { title, description, userID } = req.body;
