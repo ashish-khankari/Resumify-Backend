@@ -41,20 +41,13 @@ const registerUser = async (req: Request, res: Response) => {
 
 const loginUser = async (req: Request, res: Response) => {
   try {
-    // Use req.query instead of req.body
-    const { email, password } = req.query;
-    console.log('email, password', email, password);
-    
-    // Ensure email and password are strings
-    const emailStr = email as string;
-    const passwordStr = password as string;
-    
-    const user = await userModel.findOne({ email: emailStr });
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email });
     const validatePassword = user?.password
-      ? await bcrypt.compare(passwordStr, user.password)
+      ? await bcrypt.compare(password, user.password)
       : false;
-    const validateEmail = emailStr === user?.email;
-    const token = await jwt.sign({ email: emailStr }, JWT_SECRET);
+    const validateEmail = email === user?.email;
+    const token = await jwt.sign({ email }, JWT_SECRET);
     res.cookie("access_token", token);
 
     if (validateEmail && validatePassword) {
@@ -74,7 +67,6 @@ const loginUser = async (req: Request, res: Response) => {
     return apiStatusRes(res, { status: server_Error, message: error.message });
   }
 };
-
 
 const logoutUser = async (req: Request, res: Response) => {
   try {
