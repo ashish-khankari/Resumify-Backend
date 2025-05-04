@@ -6,7 +6,7 @@ import multer from 'multer';
 const upload = multer();
 
 router.post("/register", upload.none(), userController.registerUser);
-router.get("/login", upload.none(), userController.loginUser);
+router.get("/login", userController.loginUser);
 router.get("/logout", authorization, userController.logoutUser)
 
 export default router;
